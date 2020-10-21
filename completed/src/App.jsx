@@ -28,7 +28,7 @@ const LoadableAbout = loadable(() => import('./About.jsx'), {
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.calculatePi(1500); // 测试密集计算对性能的影响
+        // this.calculatePi(1500); // 测试密集计算对性能的影响
         // test(); // 测试函数lazy parsing, eager parsing
     }
 
