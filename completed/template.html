@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="dns-prefetch" href="https://ss1.bdstatic.com">
+  <link rel="dns-prefetch" href="https://ss0.bdstatic.com">
+  <link rel="dns-prefetch" href="https://timgsa.baidu.com">
+  <link rel="dns-prefetch" href="https://ss2.bdstatic.com">
+  <!--引入工具库-->
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+  <title>Dereck's Backyard Sales!</title>
+</head>
+
+<body>
+  <div id="main"></div>
+  <!--<script src="/libs/lodash.js"></script>-->
+  <!--<script src="/libs/fastdom.min.js"></script>-->
+  <script>
+    // load事件后触发
+    window.addEventListener('load', (event) =>{
+      // 交互时间
+      let timing = performance.getEntriesByType('navigation')[0];
+      // 计算首次可交互时间
+      let tt1 = timing.domInteractive - timing.fetchStart;
+      console.log('timing.domInteractive', timing.domInteractive);
+      console.log('timing.fetchStart', timing.fetchStart);
+      console.log('tt1', tt1);
+
+    })
+
+// -----------------------------------------------------------------------------------
+
+let observer = new PerformanceObserver(list =>{
+  for (const entry of list.getEntries()) {
+    console.log('entry', entry) 
+  }
+})
+
+// 查看长时间的任务
+observer.observe({entryTypes: ['longtask']});
+
+// -----------------------------------------------------------------------------------
+
+    // 页面在当前视口显示隐藏事件。切换tab页，回到桌面，最小化浏览器窗口等都会触发这个事件。
+    let vEvent = 'visibilitychange';
+    if (document.webkitHidden != undefined) {
+      vEvent = 'webkitvisibilitychange';
+    }
+
+    document.addEventListener(vEvent, function (event) {
+      if (document.hidden || document.webkitHidden) {
+        console.log('页面隐藏了')
+      }else{
+        console.log('页面显示了')
+      }
+    }, false)
+
+    
+// -----------------------------------------------------------------------------------
+
+    let connection = navigator.connection || navigator.webkitConnection || navigator.mozConnection;
+
+    connection.addEventListener('change', function (event) {
+      console.log('当前网络状况' + connection.effectiveType);
+    })
+
+
+  </script>
+</body>
+
+</html>
