@@ -34,7 +34,7 @@ class Home extends React.Component {
     render() {
         let cards = [];
         // 多次添加更多的卡片，展示懒加载
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 3; i++) {
             cards.push(model.map(panel => (
                 <Suspense fallback={<div>Loading...</div>}>
                     <Card key={panel.name} image={panel.image} title={panel.name}

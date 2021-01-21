@@ -14,64 +14,52 @@
     body {
       margin: 0;
     }
+
+    #box {
+      height: 100px;
+      background-color: blue;
+    }
   </style>
   <title>Dereck's Backyard Sales!</title>
 </head>
 
 <body>
   <div id="main"></div>
-  <!--<script src="/libs/lodash.js"></script>-->
-  <!--<script src="/libs/fastdom.min.js"></script>-->
+  <div id="box"></div>
+
+  <script src="./libs/fastdom.min.js"></script>
   <script>
-    // load事件后触发
-    window.addEventListener('load', (event) =>{
-      // 交互时间
-      let timing = performance.getEntriesByType('navigation')[0];
-      // 计算首次可交互时间
-      let tt1 = timing.domInteractive - timing.fetchStart;
-      console.log('timing.domInteractive', timing.domInteractive);
-      console.log('timing.fetchStart', timing.fetchStart);
-      console.log('tt1', tt1);
+    const update = (timestamp) => {
+      console.log('timestamp', timestamp)
+      let cards = document.querySelectorAll('.jss10');
+      // console.log('cards', cards)
+      for (let i = 0; i < cards.length; i++) {
+        fastdom.measure(() => {
+          const top = cards[i].offsetTop;
+          fastdom.mutate(() => {
+            cards[i].style.width = (Math.sin(top + timestamp / 1000) + 1) * 500 + 'px';
+          });
+        });
+      }
 
-    })
-
-// -----------------------------------------------------------------------------------
-
-let observer = new PerformanceObserver(list =>{
-  for (const entry of list.getEntries()) {
-    console.log('entry', entry) 
-  }
-})
-
-// 查看长时间的任务
-observer.observe({entryTypes: ['longtask']});
-
-// -----------------------------------------------------------------------------------
-
-    // 页面在当前视口显示隐藏事件。切换tab页，回到桌面，最小化浏览器窗口等都会触发这个事件。
-    let vEvent = 'visibilitychange';
-    if (document.webkitHidden != undefined) {
-      vEvent = 'webkitvisibilitychange';
+      window.requestAnimationFrame(update);  // 浏览器重绘前执行。因此在一个动作过后接着执行这个函数，就能达到连续动画。
     }
 
-    document.addEventListener(vEvent, function (event) {
-      if (document.hidden || document.webkitHidden) {
-        console.log('页面隐藏了')
-      }else{
-        console.log('页面显示了')
-      }
+    // window.addEventListener('load', update, false);
+
+    let flag = false;
+    const box = document.querySelector('#box');
+    window.addEventListener('pointermove', function (e) {
+      if (flag) return;
+      flag = true;
+      // const top = box.offsetTop;
+      // console.log('clientX', clientX)
+      window.requestAnimationFrame(function (timestamp) {
+        box.style.width = (Math.sin(box.offsetTop + timestamp / 1000) + 1) * 500 + 'px';
+        console.log('timestamp', timestamp)
+        flag = false;
+      })
     }, false)
-
-    
-// -----------------------------------------------------------------------------------
-
-    let connection = navigator.connection || navigator.webkitConnection || navigator.mozConnection;
-
-    connection.addEventListener('change', function (event) {
-      console.log('当前网络状况' + connection.effectiveType);
-    })
-
-
   </script>
 </body>
 
